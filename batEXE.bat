@@ -1,31 +1,31 @@
 @echo off
 setlocal EnableDelayedExpansion
 
-:: Define paths
-set "SCRIPT_DIR=C:\Users\Administrator\Desktop\un"
-set "EXE_PATH=%SCRIPT_DIR%\dist\unpack.exe"
-set "BOOT_IMG=%SCRIPT_DIR%\boot.img"
-set "OUTPUT_DIR=%SCRIPT_DIR%\output"
-set "SEVEN_ZIP=%SCRIPT_DIR%\Zip\7z.exe"
-set "LOG_FILE=%SCRIPT_DIR%\extraction_log.txt"
+:: Use the current directory of the batch file
+set "SCRIPT_DIR=%~dp0"
+set "EXE_PATH=%SCRIPT_DIR%unpack.exe"
+set "BOOT_IMG=%SCRIPT_DIR%boot.img"
+set "OUTPUT_DIR=%SCRIPT_DIR%output"
+set "SEVEN_ZIP=%SCRIPT_DIR%7z.exe"
+set "LOG_FILE=%SCRIPT_DIR%extraction_log.txt"
 
 :: Check if executable exists
 if not exist "%EXE_PATH%" (
-    echo Error: unpack.exe not found at %EXE_PATH%
+    echo Error: unpack.exe not found in the current directory
     pause
     exit /b 1
 )
 
 :: Check if boot.img exists
 if not exist "%BOOT_IMG%" (
-    echo Error: boot.img not found at %BOOT_IMG%
+    echo Error: boot.img not found in the current directory
     pause
     exit /b 1
 )
 
 :: Check if 7z.exe exists
 if not exist "%SEVEN_ZIP%" (
-    echo Warning: 7z.exe not found at %SEVEN_ZIP%. Ensure it's bundled with the executable or available in the specified path.
+    echo Warning: 7z.exe not found in the current directory. Ensure it's bundled with the executable or available.
 )
 
 :: Create output directory
@@ -38,7 +38,7 @@ echo Starting boot image extraction at %date% %time% >> "%LOG_FILE%"
 echo. >> "%LOG_FILE%"
 
 :: Run the executable
-echo Running: %EXE_PATH% extract "%BOOT_IMG%" --output-dir "%OUTPUT_DIR%" --skip-avb --debug-cpio
+echo Running: unpack.exe extract "%BOOT_IMG%" --output-dir "%OUTPUT_DIR%" --skip-avb --debug-cpio
 "%EXE_PATH%" extract "%BOOT_IMG%" --output-dir "%OUTPUT_DIR%" --skip-avb --debug-cpio >> "%LOG_FILE%" 2>&1
 
 :: Check if extraction was successful
